@@ -613,6 +613,11 @@ enum StealthIndex : uint8_t {
         HW_SERIAL_BEGIN(E0);
       #else
         stepperE0.beginSerial(TMC_E0_BAUD_RATE);
+//        #ifdef TMC_E0_BAUD_RATE
+//          stepperE0.beginSerial(TMC_E0_BAUD_RATE); // use slower baud rate if defined
+//        #else
+//          stepperE0.beginSerial(TMC_BAUD_RATE);   // else use standard rate
+//        #endif
       #endif
     #endif
     #if AXIS_HAS_UART(E1)
