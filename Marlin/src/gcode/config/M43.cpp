@@ -55,7 +55,8 @@
 #endif
 
 inline void toggle_pins() {
-  const bool ignore_protection = parser.boolval('I');
+  const bool ignore_protection = parser.boolval('I'),
+            initial_state = parser.boolval('V');
   const int repeat = parser.intval('R', 1),
             start = PARSED_PIN_INDEX('S', 0),
             end = PARSED_PIN_INDEX('L', NUM_DIGITAL_PINS - 1),
@@ -98,10 +99,10 @@ inline void toggle_pins() {
       {
         pinMode(pin, OUTPUT);
         for (int16_t j = 0; j < repeat; j++) {
-          hal.watchdog_refresh(); extDigitalWrite(pin, 0); safe_delay(wait);
-          hal.watchdog_refresh(); extDigitalWrite(pin, 1); safe_delay(wait);
-          hal.watchdog_refresh(); extDigitalWrite(pin, 0); safe_delay(wait);
-          hal.watchdog_refresh();
+          watchdog_refresh(); extDigitalWrite(pin, initial_state); safe_delay(wait);
+          watchdog_refresh(); extDigitalWrite(pin, !initial_state); safe_delay(wait);
+          watchdog_refresh(); extDigitalWrite(pin, initial_state); safe_delay(wait);
+          watchdog_refresh();
         }
       }
       #ifdef __STM32F1__
