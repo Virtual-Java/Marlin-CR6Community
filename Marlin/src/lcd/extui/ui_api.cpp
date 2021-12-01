@@ -1239,4 +1239,10 @@ void MarlinUI::kill_screen(FSTR_P const error, FSTR_P const component) {
   }
 }
 
+#if HAS_BUZZER
+void MarlinUI::buzz(const long duration, const uint16_t freq) {
+  ExtUI::onPlayTone(freq, duration);
+}
+#endif // HAS_BUZZER
+
 #endif // EXTENSIBLE_UI
