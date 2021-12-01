@@ -184,6 +184,7 @@ void AxisSettingsHandler::HandleBackNavigation(DGUS_VP_Variable &var, void *val_
         #if AXIS_IS_TMC(Z)
         case Z_AXIS:
             stepperZ.rms_current(tmc_current);
+            stepperZ2.rms_current(tmc_current);
 
             #if AXIS_HAS_STEALTHCHOP(Z)
                 stepperZ.set_stealthChop(stealthchop);
