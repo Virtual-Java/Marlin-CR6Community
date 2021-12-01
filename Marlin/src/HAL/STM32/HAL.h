@@ -160,6 +160,23 @@ typedef libServo hal_servo_t;
 //
 // Pin Mapping for M42, M43, M226
 //
+
+void HAL_adc_init();
+
+//#define HAL_ANALOG_SELECT(pin) pinMode(pin, INPUT)
+
+#define HAL_ADC_VREF         3.3
+#define HAL_ADC_RESOLUTION  ADC_RESOLUTION // 12
+#define HAL_START_ADC(pin)  {}  //HAL_adc_start_conversion(pin)
+#define HAL_READ_ADC()      0 //HAL_adc_result
+#define HAL_ADC_READY()     true
+
+//inline void HAL_adc_init() { analogReadResolution(HAL_ADC_RESOLUTION); }
+
+void HAL_adc_start_conversion(const uint8_t adc_pin);
+
+uint16_t HAL_adc_get_result();
+
 #define GET_PIN_MAP_PIN(index) index
 #define GET_PIN_MAP_INDEX(pin) pin
 #define PARSED_PIN_INDEX(code, dval) parser.intval(code, dval)
