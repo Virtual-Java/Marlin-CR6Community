@@ -1737,57 +1737,7 @@ void Temperature::mintemp_error(const heater_id_t heater_id OPTARG(ERR_INCLUDE_T
 
 #endif // PIDTEMPCHAMBER
 
-<<<<<<< HEAD
 #if HAS_HOTEND
-=======
-/**
- * Manage heating activities for extruder hot-ends and a heated bed
- *  - Acquire updated temperature readings
- *    - Also resets the watchdog timer
- *  - Invoke thermal runaway protection
- *  - Manage extruder auto-fan
- *  - Apply filament width to the extrusion rate (may move)
- *  - Update the heated bed PID output value
- */
-void Temperature::manage_heater() {
-  if (marlin_state == MF_INITIALIZING) return watchdog_refresh(); // If Marlin isn't started, at least reset the watchdog!
-
-  static bool no_reentry = false;  // Prevent recursion
-  if (no_reentry) return;
-  REMEMBER(mh, no_reentry, true);
-
-  #if ENABLED(EMERGENCY_PARSER)
-    if (emergency_parser.killed_by_M112) kill(M112_KILL_STR, nullptr, true);
-
-    if (emergency_parser.quickstop_by_M410) {
-      emergency_parser.quickstop_by_M410 = false; // quickstop_stepper may call idle so clear this now!
-      quickstop_stepper();
-    }
-  #endif
-
-  if (!raw_temps_ready) return;
-  if (!updateTemperaturesIfReady()) return; // Will also reset the watchdog if temperatures are ready
-
-  #if DISABLED(IGNORE_THERMOCOUPLE_ERRORS)
-    #if TEMP_SENSOR_0_IS_MAX_TC
-      if (degHotend(0) > _MIN(HEATER_0_MAXTEMP, TEMP_SENSOR_0_MAX_TC_TMAX - 1.0)) max_temp_error(H_E0);
-      if (degHotend(0) < _MAX(HEATER_0_MINTEMP, TEMP_SENSOR_0_MAX_TC_TMIN + .01)) min_temp_error(H_E0);
-    #endif
-    #if TEMP_SENSOR_1_IS_MAX_TC
-      if (degHotend(1) > _MIN(HEATER_1_MAXTEMP, TEMP_SENSOR_1_MAX_TC_TMAX - 1.0)) max_temp_error(H_E1);
-      if (degHotend(1) < _MAX(HEATER_1_MINTEMP, TEMP_SENSOR_1_MAX_TC_TMIN + .01)) min_temp_error(H_E1);
-    #endif
-    #if TEMP_SENSOR_REDUNDANT_IS_MAX_TC
-      if (degRedundant() > TEMP_SENSOR_REDUNDANT_MAX_TC_TMAX - 1.0) max_temp_error(H_REDUNDANT);
-      if (degRedundant() < TEMP_SENSOR_REDUNDANT_MAX_TC_TMIN + .01) min_temp_error(H_REDUNDANT);
-    #endif
-  #endif
-
-  millis_t ms = millis();
-
-  #if HAS_HOTEND
->>>>>>> e9f53704ef (Change ADC reading to DMA driven)
-
   void Temperature::manage_hotends(const millis_t &ms) {
     HOTEND_LOOP() {
       #if ENABLED(THERMAL_PROTECTION_HOTENDS)
@@ -3058,7 +3008,6 @@ void Temperature::init() {
   #if ENABLED(POWER_MONITOR_VOLTAGE)
     //HAL_ANALOG_SELECT(POWER_MONITOR_VOLTAGE_PIN);
   #endif
->>>>>>> e9f53704ef (Change ADC reading to DMA driven)
 
   HAL_timer_start(MF_TIMER_TEMP, TEMP_TIMER_FREQUENCY);
   ENABLE_TEMPERATURE_INTERRUPT();
@@ -4264,7 +4213,6 @@ void Temperature::isr() {
       break;
 
     #if HAS_TEMP_ADC_0
-<<<<<<< HEAD
       case PrepareTemp_0: hal.adc_start(TEMP_0_PIN); break;
       case MeasureTemp_0: ACCUMULATE_ADC(temp_hotend[0]); break;
     #endif
@@ -4272,17 +4220,6 @@ void Temperature::isr() {
     #if HAS_TEMP_ADC_BED
       case PrepareTemp_BED: hal.adc_start(TEMP_BED_PIN); break;
       case MeasureTemp_BED: ACCUMULATE_ADC(temp_bed); break;
-=======
-      case PrepareTemp_0: HAL_START_ADC(TEMP_0_PIN); break;
-      case MeasureTemp_0: temp_hotend[0].sample(AD_DMA[0]); break;
-      //case MeasureTemp_0: ACCUMULATE_ADC(temp_hotend[0]); break;
-    #endif
-
-    #if HAS_TEMP_ADC_BED
-      case PrepareTemp_BED: HAL_START_ADC(TEMP_BED_PIN); break;
-      case MeasureTemp_BED: temp_bed.sample(AD_DMA[1]); break;
-      //case MeasureTemp_BED: ACCUMULATE_ADC(temp_bed); break;
->>>>>>> e9f53704ef (Change ADC reading to DMA driven)
     #endif
 
     #if HAS_TEMP_ADC_CHAMBER
@@ -4373,14 +4310,8 @@ void Temperature::isr() {
         hal.adc_start(POWER_MONITOR_VOLTAGE_PIN);
         break;
       case Measure_POWER_MONITOR_VOLTAGE:
-<<<<<<< HEAD
         if (!hal.adc_ready()) next_sensor_state = adc_sensor_state; // Redo this state
         else power_monitor.add_voltage_sample(hal.adc_value());
-=======
-        if (!HAL_ADC_READY()) next_sensor_state = adc_sensor_state; // Redo this state
-        else power_monitor.add_voltage_sample(AD_DMA[2]);
-        //else power_monitor.add_voltage_sample(HAL_READ_ADC());
->>>>>>> e9f53704ef (Change ADC reading to DMA driven)
         break;
     #endif
 
