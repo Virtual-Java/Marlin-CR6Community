@@ -669,8 +669,14 @@ void GcodeSuite::G26() {
 
   if (g26.turn_on_heaters() != G26_OK) goto LEAVE;
 
-  current_position.e = 0.0;
-  sync_plan_position_e();
+// old commands:
+//  IF_ENABLED(EXTENSIBLE_UI, ExtUI::onMeshValidationStarting());
+//  IF_ENABLED(EXTENSIBLE_UI, updateStatus_P(PSTR("Starting mesh validation...")));
+
+//  if (G26_OK == turn_on_heaters()) {
+
+    current_position.e = 0.0;
+    sync_plan_position_e();
 
   if (g26.prime_flag && g26.prime_nozzle() != G26_OK) goto LEAVE;
 
@@ -697,7 +703,13 @@ void GcodeSuite::G26() {
   #if DISABLED(ARC_SUPPORT)
 
     /**
-     * Pre-generate radius offset values at 30 degree intervals to reduce CPU load.
+     *  Bed is preheated
+     *
+     *  Nozzle is at temperature
+     *
+     *  Filament is primed!
+     *
+     *  It's  "Show Time" !!!
      */
     #define A_INT 30
     #define _ANGS (360 / A_INT)
@@ -712,7 +724,9 @@ void GcodeSuite::G26() {
     for (uint8_t i = 0; i < A_CNT; ++i)
       trig_table[i] = INTERSECTION_CIRCLE_RADIUS * cos(RADIANS(i * A_INT));
 
-  #endif // !ARC_SUPPORT
+    circle_flags.reset();
+    horizontal_mesh_line_flags.reset();
+    vertical_mesh_line_flags.reset();
 
   mesh_index_pair location;
   TERN_(EXTENSIBLE_UI, ExtUI::onMeshUpdate(location.pos, ExtUI::G26_START));
