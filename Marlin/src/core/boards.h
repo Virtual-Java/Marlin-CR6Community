@@ -329,6 +329,7 @@
 // STM32 ARM Cortex-M3
 //
 
+<<<<<<< HEAD
 #define BOARD_MALYAN_M200_V2          5000  // STM32F070CB controller
 #define BOARD_MALYAN_M300             5001  // STM32F070-based delta
 #define BOARD_STM32F103RE             5002  // STM32F103RE Libmaple-based STM32F1 controller
@@ -402,7 +403,6 @@
 #define BOARD_MD_D301                 5070  // Mingda D2 DZ301 V1.0 (STM32F103ZE)
 #define BOARD_VOXELAB_AQUILA          5071  // Voxelab Aquila V1.0.0/V1.0.1 (GD32F103RC / N32G455RE / STM32F103RE)
 #define BOARD_SPRINGER_CONTROLLER     5072  // ORCA 3D SPRINGER Modular Controller (STM32F103VC)
-
 //
 // ARM Cortex-M4F
 //
@@ -526,8 +526,8 @@
 //
 // Custom board
 //
-#define BOARD_AC_TRI_F1_V1            6200  // Anycubic trigorilla F103 board
 
+#define BOARD_AC_TRI_F1_V1            6200  // Anycubic trigorilla F103 board
 #define BOARD_CUSTOM                  9998  // Custom pins definition for development and/or rare boards
 
 //
