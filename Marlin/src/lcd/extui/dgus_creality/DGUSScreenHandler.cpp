@@ -970,6 +970,13 @@ void DGUSScreenHandler::UpdateMeshValue(const int8_t x, const int8_t y, const fl
 
     // Convert to RGB
     color = CreateRgb(h, 1, 0.75);
+      SERIAL_ECHO(" clampedZ: ");
+      SERIAL_ECHO_F(clampedZ, 4);
+      SERIAL_ECHO(" h: ");
+      SERIAL_ECHO_F(h, 4);
+      SERIAL_ECHO(" color: ");
+      SERIAL_ECHO(color);
+    SERIAL_ECHOLN("");
   }
 
   dgusdisplay.SetVariableDisplayColor(spAddr, color);
