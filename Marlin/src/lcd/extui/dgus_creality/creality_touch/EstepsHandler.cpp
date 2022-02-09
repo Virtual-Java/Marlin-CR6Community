@@ -44,7 +44,7 @@ void EstepsHandler::Init() {
 
 
 void EstepsHandler::HandleStartButton(DGUS_VP_Variable &var, void *val_ptr) {
-    static_assert(ADVANCED_PAUSE_PURGE_LENGTH == 0, "Assuming PURGE_LENGTH is 0 so we can use M701");
+    //static_assert(ADVANCED_PAUSE_PURGE_LENGTH == 0, "Assuming PURGE_LENGTH is 0 so we can use M701");
 
     // Validate
     if (calibration_temperature < EXTRUDE_MINTEMP) {
@@ -77,11 +77,7 @@ void EstepsHandler::HandleStartButton(DGUS_VP_Variable &var, void *val_ptr) {
     GcodeSuite::set_relative_mode(true);
     
 
-    char cmd[64];
-
-    //ExtUI::injectCommands_P("G0 Z5 F150");
-    sprintf_P(cmd, PSTR("G0 Z5 F150"));
-    ExtUI::injectCommands_P(cmd);
+    ExtUI::injectCommands_P("G0 Z5 F150");
     //SERIAL_ECHOLNPAIR("Executing: ", cmd);
     queue.advance();
 
@@ -98,8 +94,9 @@ void EstepsHandler::HandleStartButton(DGUS_VP_Variable &var, void *val_ptr) {
     // Set-up command
     SetStatusMessage(PSTR("Extruding..."));
 
-//    char cmd[64];
+    char cmd[64];
 //    sprintf_P(cmd, PSTR("G1 E%f F50"), filament_to_extrude);
+
     char str_temp[6];
     dtostrf(filament_to_extrude, 3, 1, str_temp);
     sprintf_P(cmd, PSTR("G1 E%s F50"), str_temp);
@@ -110,9 +107,7 @@ void EstepsHandler::HandleStartButton(DGUS_VP_Variable &var, void *val_ptr) {
     planner.synchronize();
 
     // Restore position
-    //ExtUI::injectCommands_P("G0 Z-5 F150");
-    sprintf_P(cmd, PSTR("G0 Z-5 F150"));
-    ExtUI::injectCommands_P(cmd);
+    ExtUI::injectCommands_P("G0 Z-5 F150");
     //SERIAL_ECHOLNPAIR("Executing: ", cmd);
     queue.advance();
     planner.synchronize();
