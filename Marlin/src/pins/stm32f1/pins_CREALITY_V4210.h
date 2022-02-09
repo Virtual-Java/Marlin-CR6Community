@@ -68,9 +68,17 @@
 //
 // Limit Switches
 //
+#ifndef X_STOP_PIN
 #define X_STOP_PIN                          PA3
+#endif
+
+#ifndef Y_STOP_PIN
 #define Y_STOP_PIN                          PA7
+#endif
+
+#ifndef Z_STOP_PIN
 #define Z_STOP_PIN                          PA5
+#endif
 
 #ifndef Z_MIN_PROBE_PIN
   #define Z_MIN_PROBE_PIN                   PA5   // BLTouch IN
@@ -146,8 +154,15 @@
 #define SD_DETECT_PIN                       PC7
 #define SDCARD_CONNECTION                ONBOARD
 #define ONBOARD_SPI_DEVICE                     1
+#ifndef ONBOARD_SD_CS_PIN
 #define ONBOARD_SD_CS_PIN                   PA4   // SDSS
+<<<<<<< HEAD
 #define ONBOARD_SDIO
+=======
+#endif
+
+#define SDIO_SUPPORT
+>>>>>>> 409d1d8f83 (Update pins_CREALITY_V4210.h)
 #define NO_SD_HOST_DRIVE                          // This board's SD is only seen by the printer
 
 #if ANY(RET6_12864_LCD, HAS_DWIN_E3V2, IS_DWIN_MARLINUI)
