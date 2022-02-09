@@ -11,13 +11,78 @@
     <br />
     <a href="https://fosstodon.org/@marlinfirmware"><img alt="Follow MarlinFirmware on Mastodon" src="https://img.shields.io/mastodon/follow/109450200866020466?domain=https%3A%2F%2Ffosstodon.org&logoColor=%2300B&style=social"></a>
 </p>
+# Community firmware for touchscreen printers (like Anycubic Vyper or Creality CR-series)
+- Anycubic Vyper
+- Various contributed configurations (like Solcon, Ender 3 with touch screen, and CR-200b)
+
+**Creality CR-6:**
+- Creality stock TFT with:
+   - Creality v4.5.2 motherboard (CR-6 SE)
+   - Creality v4.5.3 motherboard (CR-6 SE and CR-6 MAX)
+   - BigTreeTech SKR CR-6 (CR-6 SE)
+- BigTreeTech SKR CR-6 with BigTreeTech TFT v3.0
+
 
 Additional documentation can be found at the [Marlin Home Page](https://marlinfw.org/).
 Please test this firmware and let us know if it misbehaves in any way. Volunteers are standing by!
 
+Initially started with the goal of providing up to date and stable Marlin for the CR-6 SE native and [BTT SKR CR6](https://damsteen.nl/blog/2020/11/25/how-to-btt-skr-cr6-installation) motherboard - **this fork of Marlin is meant for:**
+
+- Providing better firmware than the default firmwares provided by Anycubic, Creality and other manufacturers
+- [Expanding the features](https://github.com/CR6Community/CR-6-touchscreen) of the limited default touch screens delivered with 3d printers
+
+- Still expanding the features of the touch screen and merge upstream
+- Continuously update this fork to the latest Marlin stable versions
+- Provide builds for some printers by default, for the less technically inclined
+
+### Anycubic Community
+
+- [Facebook](https://www.facebook.com/groups/anycubicvyper)
+
+### Creality CR-6 communities
+The following CR-6 communities exist:
+
+Communities hosted by Creality:
+
+- [Official CR-6 user group](https://www.facebook.com/groups/CR6SECR6MAX)
+- [Official Creality user group](https://www.facebook.com/groups/creality3dofficial)
+
+### Other communities:
+
+- [Reddit /r/3dprinting](https://www.reddit.com/r/3dprinting/)
+
+### General Marlin support
+
+For general Marlin support, please check:
+
+- [Marlin Documentation](http://marlinfw.org) - Official Marlin documentation
+>>>>>>> 8ad39ebaa8 (Update README.md)
+- [Marlin Discord](https://discord.gg/n5NJ59y) - Discuss issues with Marlin users and developers
+- Facebook Group ["Marlin Firmware"](https://www.facebook.com/groups/1049718498464482/)
+- RepRap.org [Marlin Forum](https://forums.reprap.org/list.php?415)
+- Facebook Group ["Marlin Firmware for 3D Printers"](https://www.facebook.com/groups/3Dtechtalk/)
+- [Marlin Configuration](https://www.youtube.com/results?search_query=marlin+configuration) on YouTube
+
+## Contributors
+
+Marlin is constantly improving thanks to a huge number of contributors from all over the world bringing their specialties and talents. Huge thanks are due to [all the contributors](https://github.com/MarlinFirmware/Marlin/graphs/contributors) who regularly patch up bugs, help direct traffic, and basically keep Marlin from falling apart. Marlin's continued existence would not be possible without them.
+
+## Administration
+
+Regular users can open and close their own issues, but only the administrators can do project-related things like add labels, merge changes, set milestones, and kick trolls. The current Marlin admin team consists of:
+
+The current core Community firmware dev team consists of:
+
+
+
+Marlin and the Community Firmware is published under the [GPL license](/LICENSE) because we believe in open development. The GPL comes with both rights and obligations. Whether you use Marlin firmware as the driver for your open or closed-source product, you must keep Marlin open, and you must provide your compatible Marlin source code to end users upon request. The most straightforward way to comply with the Marlin license is to make a fork of Marlin on Github, perform your modifications, and direct users to your modified fork.
+
+
+
 ## Marlin 2.1 Bugfix Branch
 
 __Not for production use. Use with caution!__
+Ensure you take the right assets: the `[firmware/main-board]-[suffix].bin`. You should not download the `Source code` archive if you are downloading with the purpose of directly flashing the firmware onto your printer.
 
 Marlin 2.1 takes this popular RepRap firmware to the next level by adding support for much faster 32-bit and ARM-based boards while improving support for 8-bit AVR boards. Read about Marlin's decision to use a "Hardware Abstraction Layer" below.
 
@@ -51,6 +116,9 @@ A core tenet of this project is to keep supporting 8-bit AVR boards while also m
 
 ### Supported Platforms
 
+<table align="center">
+<tr><td>Project Maintainer</td></tr>
+<tr><td>
   Platform|MCU|Example Boards
   --------|---|-------
   [Arduino AVR](https://www.arduino.cc/)|ATmega|RAMPS, Melzi, RAMBo
@@ -89,23 +157,6 @@ Proposed patches should be submitted as a Pull Request against the ([bugfix-2.1.
 The Issue Queue is reserved for Bug Reports and Feature Requests. To get help with configuration and troubleshooting, please use the following resources:
 
 - [Marlin Documentation](https://marlinfw.org) - Official Marlin documentation
-- [Marlin Discord](https://discord.gg/n5NJ59y) - Discuss issues with Marlin users and developers
-- Facebook Group ["Marlin Firmware"](https://www.facebook.com/groups/1049718498464482/)
-- RepRap.org [Marlin Forum](https://forums.reprap.org/list.php?415)
-- Facebook Group ["Marlin Firmware for 3D Printers"](https://www.facebook.com/groups/3Dtechtalk/)
-- [Marlin Configuration](https://www.youtube.com/results?search_query=marlin+configuration) on YouTube
-
-## Contributors
-
-Marlin is constantly improving thanks to a huge number of contributors from all over the world bringing their specialties and talents. Huge thanks are due to [all the contributors](https://github.com/MarlinFirmware/Marlin/graphs/contributors) who regularly patch up bugs, help direct traffic, and basically keep Marlin from falling apart. Marlin's continued existence would not be possible without them.
-
-## Administration
-
-Regular users can open and close their own issues, but only the administrators can do project-related things like add labels, merge changes, set milestones, and kick trolls. The current Marlin admin team consists of:
-
-<table align="center">
-<tr><td>Project Maintainer</td></tr>
-<tr><td>
 
  🇺🇸  **Scott Lahteine**
        [@thinkyhead](https://github.com/thinkyhead)
