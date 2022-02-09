@@ -72,6 +72,7 @@
  */
 #define SOURCE_CODE_URL "github.com/MarlinFirmware/Marlin"
 //#define SOURCE_CODE_URL "https://github.com/VyperCommunity/Marlin"
+//#define SOURCE_CODE_URL "https://github.com/Pmatsol58/Marlin"
 
 /**
  * Default generic printer UUID.
@@ -84,6 +85,7 @@
  */
 #define WEBSITE_URL "marlinfw.org"
 //#define WEBSITE_URL "github.com/as_yet_unknown"
+//#define WEBSITE_URL "github.com/CR6Community"
 
 /**
  * Set the vendor info the serial USB interface, if changable
