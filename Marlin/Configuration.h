@@ -41,6 +41,11 @@
 //============================= Getting Started =============================
 //===========================================================================
 
+// Choose the name from boards.h that matches your setup
+#ifndef MOTHERBOARD
+  #define MOTHERBOARD BOARD_AC_TRI_F1_V1
+#endif
+
 /**
  * Here are some useful links to help get your machine configured and calibrated:
  *
@@ -59,11 +64,23 @@
 
 // @section info
 
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%% Options for building Vyper image %%%%
+
 // select build type here
-//#define VYPER_BUILD       // standard
-//#define VYPER_BUILD_LA    // with linear advance and junction deviation enabled
-//#define VYPER_BUILD_LA_T  // as above but with uart connection to TMC2209's for x, y, z and z2
-#define VYPER_BUILD_LA_TE   // as above but with software serial connection to e stepper
+//#define VYPER_BUILD         // standard
+#define VYPER_BUILD_LA      // with linear advance and junction deviation enabled
+//#define VYPER_BUILD_LA_T    // as above but with uart connection to TMC2209's for x, y, z and z2
+//#define VYPER_BUILD_LA_TE   // as above but with software serial connection to e stepper
+
+// Leave undefined to home Z using two Z sensors (stock configuration)
+#define VYPER_NOZZLE_HOMING // home Z using nozzle sensor at middle of bed
+
+// NOTE to use nozzle sensor any adjustable Z sensors must be set to maximum
+// extended length so sensor is detected before nozzle reaches bed
+
+// Todo tidy this up to fit with std build practices
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "(Paul Matthews, Vyper with TMC motherboard)" // Who made the changes.
@@ -715,10 +732,15 @@
     //#define DEFAULT_Kp  22.20
     //#define DEFAULT_Ki   1.08
     //#define DEFAULT_Kd 114.00
+    // FIND YOUR OWN: "M303 E0 C8 S215" to run autotune on the nozzle at 215 degreesC for 8 cycles.
     // Vyper v1, main board v0.0.6, firmware 2.3.5
-    #define DEFAULT_Kp  27.65
-    #define DEFAULT_Ki   2.53
-    #define DEFAULT_Kd  75.49
+    //#define DEFAULT_Kp  27.65
+    //#define DEFAULT_Ki   2.53
+    //#define DEFAULT_Kd  75.49
+    // Vyper v1, main board v0.0.6, firmware CE.61c
+    #define DEFAULT_Kp 35.1458
+    #define DEFAULT_Ki 3.5006
+    #define DEFAULT_Kd 88.2161
   #endif
 #else
   #define BANG_MAX 255    // Limit hotend current while in bang-bang mode; 255=full current
@@ -885,7 +907,7 @@
 #if ANY(PIDTEMP, PIDTEMPBED, PIDTEMPCHAMBER)
   //#define PID_OPENLOOP          // Puts PID in open loop. M104/M140 sets the output power from 0 to PID_MAX
   //#define SLOW_PWM_HEATERS      // PWM with very low frequency (roughly 0.125Hz=8s) and minimum state time of approximately 1s useful for heaters driven by a relay
-  #define PID_FUNCTIONAL_RANGE 10 // If the temperature difference between the target temperature and the actual temperature
+  #define PID_FUNCTIONAL_RANGE 25 // If the temperature difference between the target temperature and the actual temperature
                                   // is more than PID_FUNCTIONAL_RANGE then the PID will be shut off and the heater will be set to min/max.
 
   //#define PID_EDIT_MENU         // Add PID editing to the "Advanced Settings" menu. (~700 bytes of flash)
@@ -909,7 +931,7 @@
  * Note: For Bowden Extruders make this large enough to allow load/unload.
  */
 #define PREVENT_LENGTHY_EXTRUDE
-#define EXTRUDE_MAXLENGTH 700
+#define EXTRUDE_MAXLENGTH 1000
 
 //===========================================================================
 //======================== Thermal Runaway Protection =======================
@@ -931,7 +953,7 @@
 #define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
 #define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
 //#define THERMAL_PROTECTION_CHAMBER // Enable thermal protection for the heated chamber
-#define THERMAL_PROTECTION_COOLER  // Enable thermal protection for the laser cooling
+//#define THERMAL_PROTECTION_COOLER  // Enable thermal protection for the laser cooling
 
 //===========================================================================
 //============================= Mechanical Settings =========================
@@ -1252,18 +1274,18 @@
 #define W_MAX_ENDSTOP_HIT_STATE HIGH
 #define Z_MIN_PROBE_ENDSTOP_HIT_STATE HIGH
 
-#if (defined VYPER_BUILD || defined VYPER_BUILD_LA)
+#if ANY(VYPER_BUILD, VYPER_BUILD_LA)
   #define X_DRIVER_TYPE  TMC2209_STANDALONE
   #define Y_DRIVER_TYPE  TMC2209_STANDALONE
   #define Z_DRIVER_TYPE  TMC2209_STANDALONE
   #define Z2_DRIVER_TYPE TMC2209_STANDALONE
   #define E0_DRIVER_TYPE TMC2209_STANDALONE
-#elif (defined VYPER_BUILD_LA_T || defined VYPER_BUILD_LA_TE)
+#elif ANY(VYPER_BUILD_LA_T, VYPER_BUILD_LA_TE)
   #define X_DRIVER_TYPE  TMC2209
   #define Y_DRIVER_TYPE  TMC2209
   #define Z_DRIVER_TYPE  TMC2209
   #define Z2_DRIVER_TYPE TMC2209
-  #ifdef VYPER_BUILD_LA_TE
+  #if ENABLED(VYPER_BUILD_LA_TE)
     #define E0_DRIVER_TYPE TMC2209
   #else
     #define E0_DRIVER_TYPE TMC2209_STANDALONE
@@ -1289,7 +1311,7 @@
 
 // Enable this feature if all enabled endstop pins are interrupt-capable.
 // This will remove the need to poll the interrupt pins, saving many CPU cycles.
-#define ENDSTOP_INTERRUPTS_FEATURE
+//#define ENDSTOP_INTERRUPTS_FEATURE
 
 /**
  * Endstop Noise Threshold
@@ -1345,11 +1367,11 @@
  * Override with M203
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 500, 500, 5, 25 }
+#define DEFAULT_MAX_FEEDRATE          { 300, 300, 40, 80 }
 
 //#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
-  #define MAX_FEEDRATE_EDIT_VALUES    { 600, 600, 10, 50 } // ...or, set your own edit limits
+  #define MAX_FEEDRATE_EDIT_VALUES    { 600, 600, 80, 160 } // ...or, set your own edit limits
 #endif
 
 /**
@@ -1360,9 +1382,9 @@
  */
 #define DEFAULT_MAX_ACCELERATION      { 1500, 1000, 50, 3000 }
 
-#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
+//#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
-  #define MAX_ACCEL_EDIT_VALUES       { 6000, 6000, 200, 20000 } // ...or, set your own edit limits
+  #define MAX_ACCEL_EDIT_VALUES       { 3000, 2000, 100, 6000 } // ...or, set your own edit limits
 #endif
 
 /**
@@ -1375,7 +1397,7 @@
  */
 #define DEFAULT_ACCELERATION          800    // X, Y, Z and E acceleration for printing moves
 #define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
-#define DEFAULT_TRAVEL_ACCELERATION   1000    // X, Y, Z acceleration for travel (non printing) moves
+#define DEFAULT_TRAVEL_ACCELERATION   1500    // X, Y, Z acceleration for travel (non printing) moves
 
 /**
  * Default Jerk limits (mm/s)
@@ -1385,9 +1407,7 @@
  * When changing speed and direction, if the difference is less than the
  * value set here, it may happen instantaneously.
  */
-#if (defined VYPER_BUILD_LA_TE || defined VYPER_BUILD_LA_T || defined VYPER_BUILD_LA)
-  //#define CLASSIC_JERK
-#else
+#if ENABLED(VYPER_BUILD)
   #define CLASSIC_JERK
 #endif
 
@@ -1411,7 +1431,7 @@
   #endif
 #endif
 
-#define DEFAULT_EJERK    10.0  // May be used by Linear Advance
+#define DEFAULT_EJERK    10  // May be used by Linear Advance
 
 /**
  * Junction Deviation Factor
@@ -1434,9 +1454,7 @@
  *
  * See https://github.com/synthetos/TinyG/wiki/Jerk-Controlled-Motion-Explained
  */
-#if (defined VYPER_BUILD_LA_TE || defined VYPER_BUILD_LA_T || defined VYPER_BUILD_LA)
-  //#define S_CURVE_ACCELERATION
-#else
+#if ENABLED(VYPER_BUILD)
   #define S_CURVE_ACCELERATION
 #endif
 
@@ -1457,7 +1475,9 @@
 //#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
 
 // Force the use of the probe for Z-axis homing
-//#define USE_PROBE_FOR_Z_HOMING
+#if ENABLED(VYPER_NOZZLE_HOMING)
+  #define USE_PROBE_FOR_Z_HOMING
+#endif
 
 /**
  * Z_MIN_PROBE_PIN
@@ -1472,6 +1492,7 @@
  *    - Normally-closed (NC) also connect to GND.
  *    - Normally-open (NO) also connect to 5V.
  */
+<<<<<<< HEAD
 //#define Z_MIN_PROBE_PIN -1
 //#define Z_MIN_PROBE_PIN 32 // Pin 32 is the RAMPS default
 #define Z_MIN_PROBE_PIN AUTO_LEVEL_RX_PIN
@@ -1489,7 +1510,6 @@
  * or (with LCD_BED_LEVELING) the LCD controller.
  */
 //#define PROBE_MANUALLY
-//#define MANUAL_PROBE_START_Z 0.2
 
 /**
  * A Fix-Mounted Probe either doesn't deploy or needs manual deployment.
@@ -1692,7 +1712,7 @@
  *     |    [-]    |
  *     O-- FRONT --+
  */
-#define NOZZLE_TO_PROBE_OFFSET { 0, 0, 0 }
+#define NOZZLE_TO_PROBE_OFFSET { 0, 0, 0.2 }
 
 // Enable and set to use a specific tool for probing. Disable to allow any tool.
 #define PROBING_TOOL 0
@@ -1705,22 +1725,24 @@
 #define PROBING_MARGIN 10
 
 // X and Y axis travel speed (mm/min) between probes
-#define XY_PROBE_FEEDRATE 5400      // (90*60)
+#define XY_PROBE_FEEDRATE 5400      // (90mm/s*60)
 
 // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
-#define Z_PROBE_FEEDRATE_FAST 180   // (3*60)
+#define Z_PROBE_FEEDRATE_FAST 120   // (2mm/s*60)
 
 // Feedrate (mm/min) for the "accurate" probe of each point
-#define Z_PROBE_FEEDRATE_SLOW (Z_PROBE_FEEDRATE_FAST >> 2)    // /4
+#define Z_PROBE_FEEDRATE_SLOW (Z_PROBE_FEEDRATE_FAST / 2)
 
 /**
  * Probe Activation Switch
  * A switch indicating proper deployment, or an optical
  * switch triggered when the carriage is near the bed.
  */
-//#define PROBE_ACTIVATION_SWITCH
+#if ENABLED(VYPER_NOZZLE_HOMING)
+  #define PROBE_ACTIVATION_SWITCH   // use left Z sensor for activation
+#endif
 #if ENABLED(PROBE_ACTIVATION_SWITCH)
-  #define PROBE_ACTIVATION_SWITCH_STATE LOW // State indicating probe is active
+  #define PROBE_ACTIVATION_SWITCH_STATE HIGH // State indicating probe is active
   //#define PROBE_ACTIVATION_SWITCH_PIN PC6 // Override default pin
 #endif
 
@@ -1784,7 +1806,7 @@
 #define Z_PROBE_ERROR_TOLERANCE     3 // (mm) Tolerance for early trigger (<= -probe.offset.z + ZPET)
 //#define Z_AFTER_PROBING           5 // (mm) Z position after probing is done
 
-#define Z_PROBE_LOW_POINT          -2 // (mm) Farthest distance below the trigger-point to go before stopping
+//#define Z_PROBE_LOW_POINT          -2 // (mm) Farthest distance below the trigger-point to go before stopping
 //#define Z_PROBE_LOW_POINT          -10 // Farthest distance below the trigger-point to go before stopping
 
 // For M851 provide ranges for adjusting the X, Y, and Z probe offsets
@@ -1799,6 +1821,17 @@
 //// For M851 give a range for adjusting the Z probe offset
 //#define Z_PROBE_OFFSET_RANGE_MIN -5
 //#define Z_PROBE_OFFSET_RANGE_MAX 5
+
+// old commands:
+// set low point 2mmm below bed taking into account the 1.5mm above bed for fixed stops
+#if ENABLED(VYPER_NOZZLE_HOMING)
+  #define Z_PROBE_LOW_POINT        -3 // Farthest distance below the trigger-point to go before stopping
+#else
+  #define Z_PROBE_LOW_POINT        -6 // Farthest distance below the trigger-point to go before stopping
+#endif
+// For M851 give a range for adjusting the Z probe offset
+//#define Z_PROBE_OFFSET_RANGE_MIN -10
+//#define Z_PROBE_OFFSET_RANGE_MAX 10
 
 // Enable the M48 repeatability test to test probe accuracy
 #define Z_MIN_PROBE_REPEATABILITY_TEST
@@ -1822,14 +1855,14 @@
   //#define WAIT_FOR_BED_HEATER     // Wait for bed to heat back up between probes (to improve accuracy)
 #endif
 #define PROBING_FANS_OFF          // Turn fans off when probing
-//#define PROBING_ESTEPPERS_OFF     // Turn all extruder steppers off when probing
+#define PROBING_ESTEPPERS_OFF     // Turn all extruder steppers off when probing
 //#define PROBING_STEPPERS_OFF      // Turn all steppers off (unless needed to hold position) when probing (including extruders)
 #define DELAY_BEFORE_PROBING 200  // (ms) To prevent vibrations from triggering piezo sensors
 
 // Require minimum nozzle and/or bed temperature for probing.
 #define PREHEAT_BEFORE_PROBING
 #if ENABLED(PREHEAT_BEFORE_PROBING)
-  #define PROBING_NOZZLE_TEMP 150   // (°C) Only applies to E0 at this time
+  #define PROBING_NOZZLE_TEMP 145   // (°C) Only applies to E0 at this time
   #define PROBING_BED_TEMP     50
 #endif
 
@@ -1907,10 +1940,10 @@
 //#define Z_CLEARANCE_FOR_HOMING  4   // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
                                       // You'll need this much clearance above Z_MAX_POS to avoid grinding.
 // old definition???
-//#define Z_HOMING_HEIGHT  4      // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
+#define Z_HOMING_HEIGHT  5      // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
                                   // Be sure to have this much clearance over your Z_MAX_POS to prevent grinding.
 
-//#define Z_AFTER_HOMING         10   // (mm) Height to move to after homing (if Z was homed)
+#define Z_AFTER_HOMING         10   // (mm) Height to move to after homing (if Z was homed)
 //#define XY_AFTER_HOMING { 10, 10 }  // (mm) Move to an XY position after homing (and raising Z)
 
 //#define EVENT_GCODE_AFTER_HOMING "M300 P440 S200"  // Commands to run after G28 (and move to XY_AFTER_HOMING)
@@ -1944,13 +1977,13 @@
 
 // @section geometry
 
-// The size of the print bed
+// The size of the printable area
 #define X_BED_SIZE 246
 #define Y_BED_SIZE 255
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
-#define X_MIN_POS 0
-#define Y_MIN_POS 0
+#define X_MIN_POS -1.0
+#define Y_MIN_POS -4.2
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
@@ -2029,6 +2062,7 @@
 
   #define FIL_RUNOUT_STATE     LOW        // Pin state indicating that filament is NOT present.
   #define FIL_RUNOUT_PULLUP               // Use internal pullup for filament runout pins.
+  #define FILAMENT_RUNOUT_THRESHOLD    255  // Number of readings above which the filament is considered present
   //#define FIL_RUNOUT_PULLDOWN           // Use internal pulldown for filament runout pins.
   //#define WATCH_ALL_RUNOUT_SENSORS      // Execute runout script on any triggering sensor, not only for the active extruder.
                                           // This is automatically enabled for MIXING_EXTRUDERs.
@@ -2074,7 +2108,7 @@
   // After a runout is detected, continue printing this length of filament
   // before executing the runout script. Useful for a sensor at the end of
   // a feed tube. Requires 4 bytes SRAM per sensor, plus 4 bytes overhead.
-  #define FILAMENT_RUNOUT_DISTANCE_MM 25
+  #define FILAMENT_RUNOUT_DISTANCE_MM 15
 
   #ifdef FILAMENT_RUNOUT_DISTANCE_MM
     // Enable this option to use an encoder disc that toggles the runout pin
@@ -2197,7 +2231,7 @@
  * Turn on with the command 'M111 S32'.
  * NOTE: Requires a lot of flash!
  */
-#define DEBUG_LEVELING_FEATURE
+//#define DEBUG_LEVELING_FEATURE
 
 #if ANY(MESH_BED_LEVELING, AUTO_BED_LEVELING_UBL, PROBE_MANUALLY)
   // Set a height for the start of manual adjustment
@@ -2229,11 +2263,11 @@
   #define G26_MESH_VALIDATION
   #if ENABLED(G26_MESH_VALIDATION)
     #define MESH_TEST_NOZZLE_SIZE    0.4  // (mm) Diameter of primary nozzle.
-    #define MESH_TEST_LAYER_HEIGHT   0.2  // (mm) Default layer height for the G26 Mesh Validation Tool.
-    #define MESH_TEST_HOTEND_TEMP  205    // (°C) Default nozzle temperature for the G26 Mesh Validation Tool.
-    #define MESH_TEST_BED_TEMP      60    // (°C) Default bed temperature for the G26 Mesh Validation Tool.
-    #define G26_XY_FEEDRATE         15    // (mm/s) Feedrate for XY Moves for the G26 Mesh Validation Tool.
-    #define G26_XY_FEEDRATE_TRAVEL  150   // (mm/s) Feedrate for travel XY Moves for the G26 Mesh Validation Tool.
+    #define MESH_TEST_LAYER_HEIGHT   0.3  // (mm) Default layer height for the G26 Mesh Validation Tool.
+    #define MESH_TEST_HOTEND_TEMP    205  // (°C) Default nozzle temperature for the G26 Mesh Validation Tool.
+    #define MESH_TEST_BED_TEMP        60  // (°C) Default bed temperature for the G26 Mesh Validation Tool.
+    #define G26_XY_FEEDRATE           15  // (mm/s) Feedrate for XY Moves for the G26 Mesh Validation Tool.
+    #define G26_XY_FEEDRATE_TRAVEL   150  // (mm/s) Feedrate for travel XY Moves for the G26 Mesh Validation Tool.
     #define G26_RETRACT_MULTIPLIER   1.0  // G26 Q (retraction) used by default between mesh test elements.
   #endif
 
@@ -2252,7 +2286,7 @@
 
     // Beyond the probed grid, continue the implied tilt?
     // Default is to maintain the height of the nearest edge.
-    //#define EXTRAPOLATE_BEYOND_GRID
+    #define EXTRAPOLATE_BEYOND_GRID
 
     //
     // Subdivision of the grid by Catmull-Rom method.
@@ -2375,7 +2409,7 @@
  * Commands to execute at the end of G29 probing.
  * Useful to retract or move the Z probe out of the way.
  */
-#define Z_PROBE_END_SCRIPT "G28"
+#define Z_PROBE_END_SCRIPT "G1 Z15 F1200"
 
 // @section homing
 
@@ -2395,7 +2429,12 @@
 //#define MANUAL_W_HOME_POS 0
 #define MANUAL_X_HOME_POS -1.0
 #define MANUAL_Y_HOME_POS -4.2
-#define MANUAL_Z_HOME_POS  1.5  // for fixed stops, adjustable need to be fully out or changed to fixed
+// Following value is for fixed z stops, adjustable z stops need to be fully out or changed to fixed
+// See thingiverse for replacement fixed insert to fit adjustable stops
+//#define MANUAL_Z_HOME_POS  1.5  
+//#define MANUAL_I_HOME_POS 0
+//#define MANUAL_J_HOME_POS 0
+//#define MANUAL_K_HOME_POS 0
 
 /**
  * Use "Z Safe Homing" to avoid homing with a Z probe outside the bed area.
@@ -2404,8 +2443,9 @@
  * - Allows Z homing only when XY positions are known and trusted.
  * - If stepper drivers sleep, XY homing may be required again before Z homing.
  */
-//#define Z_SAFE_HOMING
-
+#if ENABLED(VYPER_NOZZLE_HOMING)
+  #define Z_SAFE_HOMING
+#endif
 #if ENABLED(Z_SAFE_HOMING)
   #define Z_SAFE_HOMING_X_POINT X_CENTER  // (mm) X point for Z homing
   #define Z_SAFE_HOMING_Y_POINT Y_CENTER  // (mm) Y point for Z homing
@@ -2530,7 +2570,7 @@
 // Preheat Constants - Up to 10 are supported without changes
 //
 #define PREHEAT_1_LABEL       "PLA"
-#define PREHEAT_1_TEMP_HOTEND 180
+#define PREHEAT_1_TEMP_HOTEND 200
 #define PREHEAT_1_TEMP_BED     60
 #define PREHEAT_1_FAN_SPEED     0 // Value from 0 to 255
 
@@ -2561,7 +2601,7 @@
   //#define NOZZLE_PARK_X_ONLY          // X move only is required to park
   //#define NOZZLE_PARK_Y_ONLY          // Y move only is required to park
   #define NOZZLE_PARK_Z_RAISE_MIN   2   // (mm) Always raise Z by at least this distance
-  #define NOZZLE_PARK_XY_FEEDRATE  50   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
+  #define NOZZLE_PARK_XY_FEEDRATE 100   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
   #define NOZZLE_PARK_Z_FEEDRATE    5   // (mm/s) Z axis feedrate (not used for delta printers)
 #endif
 
@@ -3326,12 +3366,13 @@
 
 //
 // CR-6 OEM touch screen. A DWIN display with touch.
-// Compatible DWIN part number DMG48270C043_03WTC
+// Compatible DWIN part number DMG48270C043_03WTC, 272x480
 // Also Vyper community edition DWIN display
-// Compatible DWIN part number DMG80480C043_02WTR
+// Compatible DWIN part number DMG80480C043_02WTR, 480x800
 // 
 
 #define DGUS_LCD_UI_CREALITY_TOUCH
+#define DGUS_LCD_UI_CREALITY_TOUCH_ORIENTATION 2 // Orientation: 0, 1, 2, 3 for 0,90,180,270 degrees respectively
 
 //
 // Touch-screen LCD for Malyan M200/M300 printers
@@ -3602,6 +3643,9 @@
 // Set number of user-controlled fans. Disable to use all board-defined fans.
 // :[1,2,3,4,5,6,7,8]
 //#define NUM_M106_FANS 1
+
+// Increase the FAN PWM frequency. Removes the PWM noise but increases heating in the FET/Arduino
+#define FAST_PWM_FAN
 
 // Use software PWM to drive the fan, as for the heaters. This uses a very low frequency
 // which is not as annoying as with the hardware PWM. On the other hand, if this frequency
