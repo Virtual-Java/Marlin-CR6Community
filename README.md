@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <p align="center"><img src="buildroot/share/pixmaps/logo/marlin-outrun-nf-500.png" height="250" alt="MarlinFirmware's logo" /></p>
 
 <h1 align="center">Marlin 3D Printer Firmware</h1>
@@ -11,7 +12,9 @@
     <br />
     <a href="https://fosstodon.org/@marlinfirmware"><img alt="Follow MarlinFirmware on Mastodon" src="https://img.shields.io/mastodon/follow/109450200866020466?domain=https%3A%2F%2Ffosstodon.org&logoColor=%2300B&style=social"></a>
 </p>
-# Community firmware for touchscreen printers (like Anycubic Vyper or Creality CR-series)
+
+# Community firmware for Anycubic Vyper
+## Community firmware for touchscreen printers (like Anycubic Vyper or Creality CR-series)
 - Anycubic Vyper
 - Various contributed configurations (like Solcon, Ender 3 with touch screen, and CR-200b)
 
@@ -26,19 +29,28 @@ You may take this source and build for your board but it is your responsibility 
 If you have the Platform.io plugin installed in Visual Studio code you can open the folder to start with the code.
 
 There are several configurations for the build of the source and they can be found at line 75 onwards of the configuration.h file:
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 // %%%% Options for building Vyper image %%%%
 
+
 // select build type here
+
 //#define VYPER_BUILD         // standard
+
 #define VYPER_BUILD_LA      // with linear advance and junction deviation enabled
+
 //#define VYPER_BUILD_LA_T    // as above but with uart connection to TMC2209's for x, y, z and z2
+
 //#define VYPER_BUILD_LA_TE   // as above but with software serial connection to e stepper
 
 // Leave undefined to home Z using two Z sensors (stock configuration)
+
 //#define VYPER_NOZZLE_HOMING // home Z using nozzle sensor at middle of bed
 
 // NOTE to use nozzle sensor any adjustable Z sensors must be set to maximum
+
 // extended length so sensor is detected before nozzle reaches bed
 
 Most users will probably want to use the VYPER_BUILD_LA option since this runs on the stock main board and gives the extra linear advance and junction deviation options for better prints (once calibrated).
