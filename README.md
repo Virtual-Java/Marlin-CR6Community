@@ -10,6 +10,13 @@ You may take this source and build for your board but it is your responsibility 
 
 There are several example configurations available for your convenience which can be found in the [`config`](./config) directory. Copy the files from the config subdirectory which reflects the needed hardware configuration to the root of the [`Marlin`](./Marlin) directory. To build the firmware Visual Studio Code with the Platform.io plugin installed is needed. Please set the Platform.io environment variable `default_envs` in the file `platformio.ini` to the string found in the previous copied file `platformio-environment.txt`.
 If you have the Platform.io plugin installed in Visual Studio code you can open the folder to start with the code.
+If you have the Platform.io plugin installed in Visual Studio code you can open the folder to start compiling with the code.
+Please note if you have previously compiled the Anycubic source and followed their instructions then you will have a modified ArduinoSTM32 framework and this will give an error during the compile, please rename or delete the framework file and the correct version should be downloaded and compiled successfully.
+Framework file can be found here:
+```
+C:\Users\<user>\.platformio\packages\framework-arduinoststm32@4.10900.200819
+```
+
 
 There are several configurations for the build of the source and they can be found at line 75 onwards of the configuration.h file:
 
