@@ -28,17 +28,31 @@
 /**
  * Marlin release version identifier
  */
-//#define SHORT_BUILD_VERSION "bugfix-2.1.x"
-#ifdef VYPER_BUILD
-    #define SHORT_BUILD_VERSION "Vyper-CE-6.2b"
-#elif defined VYPER_BUILD_LA
-    #define SHORT_BUILD_VERSION "Vyper-CE-6.2b(LA)"
-#elif defined VYPER_BUILD_LA_T
-    #define SHORT_BUILD_VERSION "Vyper-CE-6.2b(LA+T)"
-#elif defined VYPER_BUILD_LA_TE
-    #define SHORT_BUILD_VERSION "Vyper-CE-6.2b(LA+TE)"
+
+#ifdef VYPER_NOZZLE_HOMING
+    #ifdef VYPER_BUILD
+        #define SHORT_BUILD_VER "Vyper-CE-6.2c_N"
+    #elif defined VYPER_BUILD_LA
+        #define SHORT_BUILD_VER "Vyper-CE-6.2c(LA_N)"
+    #elif defined VYPER_BUILD_LA_T
+        #define SHORT_BUILD_VER "Vyper-CE-6.2c(LA+T_N)"
+    #elif defined VYPER_BUILD_LA_TE
+        #define SHORT_BUILD_VER "Vyper-CE-6.2c(LA+TE_N)"
+    #else
+        #define SHORT_BUILD_VER "Vyper-CE-6.2c"
+    #endif
 #else
-    #define SHORT_BUILD_VERSION "Vyper-CE-6.2b"
+    #ifdef VYPER_BUILD
+        #define SHORT_BUILD_VER "Vyper-CE-6.2c"
+    #elif defined VYPER_BUILD_LA
+        #define SHORT_BUILD_VER "Vyper-CE-6.2c(LA)"
+    #elif defined VYPER_BUILD_LA_T
+        #define SHORT_BUILD_VER "Vyper-CE-6.2c(LA+T)"
+    #elif defined VYPER_BUILD_LA_TE
+        #define SHORT_BUILD_VER "Vyper-CE-6.2c(LA+TE)"
+    #else
+        #define SHORT_BUILD_VER "Vyper-CE-6.2c"
+    #endif
 #endif
 
 /**
