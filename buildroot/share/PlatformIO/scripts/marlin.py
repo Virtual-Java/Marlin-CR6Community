@@ -20,6 +20,8 @@ def copytree(src, dst, symlinks=False, ignore=None):
 
 def replace_define(field, value):
 	for define in env['CPPDEFINES']:
+		envdefs = env['CPPDEFINES'].copy()
+	for define in envdefs:
 		if define[0] == field:
 			env['CPPDEFINES'].remove(define)
 	env['CPPDEFINES'].append((field, value))
