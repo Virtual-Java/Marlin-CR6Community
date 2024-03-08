@@ -900,7 +900,7 @@
   #define G34_MAX_GRADE              5    // (%) Maximum incline that G34 will handle
   #define Z_STEPPER_ALIGN_ITERATIONS 5    // Number of iterations to apply during alignment
   #define Z_STEPPER_ALIGN_ACC        0.02 // Stop iterating early if the accuracy is better than this
-  #define RESTORE_LEVELING_AFTER_G34      // Restore leveling after G34 is done?
+  //#define RESTORE_LEVELING_AFTER_G34      // Restore leveling after G34 is done?
   // After G34, re-home Z (G28 Z) or just calculate it from the last probe heights?
   // Re-homing might be more precise in reproducing the actual 'G28 Z' homing height, especially on an uneven bed.
   #define HOME_AFTER_G34
@@ -1317,7 +1317,7 @@
    * :['SPI_HALF_SPEED', 'SPI_QUARTER_SPEED', 'SPI_EIGHTH_SPEED']
    */
   //#define SD_SPI_SPEED SPI_HALF_SPEED
-  
+
   // The standard SD detect circuit reads LOW when media is inserted and HIGH when empty.
   // Enable this option and set to HIGH if your SD cards are incorrectly detected.
   //#define SD_DETECT_STATE HIGH
@@ -1764,7 +1764,7 @@
       //#define TOUCH_UI_UTF8_FRACTIONS     // ¼ ½ ¾
       //#define TOUCH_UI_UTF8_SYMBOLS       // µ ¶ ¦ § ¬
     #endif
-    
+
     // Cyrillic character set, costs about 27KiB of flash
     //#define TOUCH_UI_UTF8_CYRILLIC_CHARSET
   #endif

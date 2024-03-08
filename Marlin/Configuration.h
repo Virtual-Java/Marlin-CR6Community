@@ -82,7 +82,7 @@
 //#define VYPER_BUILD_LA_TE   // as above but with software serial connection to e stepper
 
 // Leave undefined to home Z using two Z sensors (stock configuration)
-//#define VYPER_NOZZLE_HOMING // home Z using nozzle sensor at middle of bed
+#define VYPER_NOZZLE_HOMING // home Z using nozzle sensor at middle of bed
 
 // NOTE to use nozzle sensor any adjustable Z sensors must be set to maximum
 // extended length so sensor is detected before nozzle reaches bed
@@ -876,7 +876,7 @@
 #define I_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define J_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define K_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
-#define Z_MIN_PROBE_ENDSTOP_INVERTING true // Set to true to invert the logic of the probe.
+#define Z_MIN_PROBE_ENDSTOP_INVERTING false // Set to true to invert the logic of the probe.
 
 /**
  * Stepper Drivers
@@ -1108,7 +1108,7 @@
  *      - normally-closed switches to GND and D32.
  *      - normally-open switches to 5V and D32.
  */
-//#define Z_MIN_PROBE_PIN AUTO_LEVEL_RX_PIN
+#define Z_MIN_PROBE_PIN AUTO_LEVEL_RX_PIN
 // Defined in pins file
 
 /**
@@ -1135,7 +1135,7 @@
  * Use the nozzle as the probe, as with a conductive
  * nozzle system or a piezo-electric smart effector.
  */
-#define NOZZLE_AS_PROBE
+//#define NOZZLE_AS_PROBE
 
 /**
  * Z Servo Probe, such as an endstop switch on a rotating arm.
@@ -1146,7 +1146,7 @@
 /**
  * The BLTouch probe uses a Hall effect sensor and emulates a servo.
  */
-//#define BLTOUCH
+#define BLTOUCH
 
 /**
  * Touch-MI Probe by hotends.fr
@@ -1238,7 +1238,7 @@
  *     |    [-]    |
  *     O-- FRONT --+
  */
-#define NOZZLE_TO_PROBE_OFFSET { 0, 0, 0.2 }
+#define NOZZLE_TO_PROBE_OFFSET { 0, 0, 22.0 }
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
@@ -1271,7 +1271,7 @@
  * Useful for a strain gauge or piezo sensor that needs to factor out
  * elements such as cables pulling on the carriage.
  */
-#define PROBE_TARE
+//#define PROBE_TARE
 #if ENABLED(PROBE_TARE)
   //#define PROBE_ONCE            // Probe only once - useful to improve direct drive reliability
   #define PROBE_TARE_TIME  300    // (ms) Time to hold tare pin
@@ -1639,7 +1639,7 @@
   // The height can be set with M420 Z<height>
   #define ENABLE_LEVELING_FADE_HEIGHT
   #if ENABLED(ENABLE_LEVELING_FADE_HEIGHT)
-    #define DEFAULT_LEVELING_FADE_HEIGHT 0.0 // (mm) Default fade height.
+    #define DEFAULT_LEVELING_FADE_HEIGHT 10.0 // (mm) Default fade height.
   #endif
 
   // For Cartesian machines, instead of dividing moves on mesh boundaries,
@@ -1753,7 +1753,7 @@
     #define LEVEL_CORNERS_VERIFY_RAISED   // After adjustment triggers the probe, re-probe to verify
     //#define LEVEL_CORNERS_AUDIO_FEEDBACK
   #endif
-  
+
   /**
    * Corner Leveling Order
    *
@@ -1791,7 +1791,7 @@
 #define MANUAL_Y_HOME_POS -4.2
 // Following value is for fixed z stops, adjustable z stops need to be fully out or changed to fixed
 // See thingiverse for replacement fixed insert to fit adjustable stops
-//#define MANUAL_Z_HOME_POS  1.5  
+//#define MANUAL_Z_HOME_POS  1.5
 //#define MANUAL_I_HOME_POS 0
 //#define MANUAL_J_HOME_POS 0
 //#define MANUAL_K_HOME_POS 0
@@ -2647,7 +2647,7 @@
 // Compatible DWIN part number DMG48270C043_03WTC, 272x480
 // Also Vyper community edition DWIN display
 // Compatible DWIN part number DMG80480C043_02WTR, 480x800
-// 
+//
 
 #define DGUS_LCD_UI_CREALITY_TOUCH
 #define DGUS_LCD_UI_CREALITY_TOUCH_ORIENTATION 2 // Orientation: 0, 1, 2, 3 for 0,90,180,270 degrees respectively
@@ -2944,7 +2944,7 @@
 // Support for Adafruit NeoPixel LED driver
 //#define NEOPIXEL_LED
 #if ENABLED(NEOPIXEL_LED)
-  #define NEOPIXEL_TYPE   NEO_GRB   // NEO_GRBW / NEO_GRB - four/three channel driver type (defined in Adafruit_NeoPixel.h)  
+  #define NEOPIXEL_TYPE   NEO_GRB   // NEO_GRBW / NEO_GRB - four/three channel driver type (defined in Adafruit_NeoPixel.h)
   //#define NEOPIXEL_PIN     PB14     // LED driving pin
   //#define NEOPIXEL2_TYPE NEOPIXEL_TYPE
   //#define NEOPIXEL2_PIN    5

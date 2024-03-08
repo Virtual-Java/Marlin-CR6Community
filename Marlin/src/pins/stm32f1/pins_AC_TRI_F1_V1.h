@@ -132,10 +132,18 @@
 #define MAIN_VOLTAGE_MEASURE_PIN            PA6
 #define AUTO_LEVEL_TX_PIN                   PB13
 #define AUTO_LEVEL_RX_PIN                   PB12
-#define PROBE_TARE_PIN                      AUTO_LEVEL_TX_PIN
-#define Z_MIN_PROBE_PIN                     AUTO_LEVEL_RX_PIN
-#define NEOPIXEL_PIN                        PB14    // neopixel LED driving pin
-#define PROBE_ACTIVATION_SWITCH_PIN         PB2
+//#define PROBE_TARE_PIN                      AUTO_LEVEL_TX_PIN
+//#define Z_MIN_PROBE_PIN                     AUTO_LEVEL_RX_PIN
+//#define NEOPIXEL_PIN                        PA13    // neopixel LED driving pin
+#define PROBE_ACTIVATION_SWITCH_PIN         PB2 // ZL Z-axis endstop left
+//#define PROBE_ACTIVATION_SWITCH_PIN         PC6 // ZR Z-axis endstop right
+
+#define SERVO0_PIN                          AUTO_LEVEL_TX_PIN
+//#define SERVO0_PIN                          AUTO_LEVEL_TX_PIN
+
+
+// Fix compile issue: "One or more timer conflict detected. Examine "timers_in_use" to help identify conflict."
+ #define TEMP_TIMER 5
 
 //
 // SD Card
@@ -189,7 +197,7 @@
 
   #define E0_SERIAL_TX_PIN                  PA11
   #define E0_SERIAL_RX_PIN                  PA12
-  
+
   #define E1_SERIAL_TX_PIN                  -1
   #define E1_SERIAL_RX_PIN                  -1
 
