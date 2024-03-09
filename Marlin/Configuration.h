@@ -3396,7 +3396,7 @@
 //#define ANYCUBIC_LCD_I3MEGA
 //#define ANYCUBIC_LCD_CHIRON
 //#define ANYCUBIC_LCD_DGUS
-#if ENABLED(ANYCUBIC_LCD_I3MEGA)
+//#if ENABLED(ANYCUBIC_LCD_I3MEGA)
   //#define ANYCUBIC_LCD_GCODE_EXT  // Add ".gcode" to menu entries for DGUS clone compatibility
 #if ANY(ANYCUBIC_LCD_I3MEGA, ANYCUBIC_LCD_CHIRON, ANYCUBIC_LCD_DGUS)
   #define LCD_SERIAL_PORT 3  // Default is 3 for Anycubic

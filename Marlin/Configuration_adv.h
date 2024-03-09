@@ -1745,10 +1745,12 @@
   //#define M73_REPORT                    // Report M73 values to host
   #if ALL(M73_REPORT, HAS_MEDIA)
     #define M73_REPORT_SD_ONLY            // Report only when printing from SD
+  #endif
+#endif
 
 
 // LCD Print Progress options
-#if EITHER(SDSUPPORT, LCD_SET_PROGRESS_MANUALLY) && ENABLED(EXTENSIBLE_UI)
+#if ANY(SDSUPPORT, LCD_SET_PROGRESS_MANUALLY) && ENABLED(EXTENSIBLE_UI)
   #define SHOW_REMAINING_TIME         // Display estimated time to completion
   //#if ANY(HAS_MARLINUI_U8GLIB, EXTENSIBLE_UI, HAS_MARLINUI_HD44780, IS_TFTGLCD_PANEL)
   #if ENABLED(SHOW_REMAINING_TIME)
@@ -4067,8 +4069,6 @@
     #endif
 
   #endif
-
-#endif
 #endif // SPINDLE_FEATURE || LASER_FEATURE
 
 /**
